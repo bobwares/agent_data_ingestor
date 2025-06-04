@@ -188,8 +188,8 @@ class _LLM(Protocol):
 
 
 def _default_llm() -> ChatOpenAI:  # noqa: D401
-    """Return a zero-temperature GPT-4o mini chat model instance."""
-    return ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    """Return a zero-temperature GPT-4o chat model instance."""
+    return ChatOpenAI(model="gpt-4o", temperature=0)
 
 
 # ───────────────────────────────────────────────────────────────
@@ -249,7 +249,7 @@ def upload_and_prompt(path: str | Path, task: str) -> str:
     identifier in a chat completion request that enables the `file_search`
     tool.
 
-    The model (default: ``gpt-4o-mini``) receives the user-supplied *task*
+    The model (default: ``gpt-4o``) receives the user-supplied *task*
     followed by the attached ``file_id`` and returns its answer.
 
     Parameters
@@ -266,8 +266,8 @@ def upload_and_prompt(path: str | Path, task: str) -> str:
     """
     file_id = _upload_to_openai(path)
     client = openai.OpenAI()
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
+    response = client.beta.chat.completions.create(
+        model="gpt-4o",
         tools=[{"type": "file_search"}],
         messages=[
             {

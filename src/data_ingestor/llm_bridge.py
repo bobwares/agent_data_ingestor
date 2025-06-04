@@ -134,7 +134,10 @@ def upload_and_prompt(path: str | Path, task: str) -> str:
     """
     file_id = _upload_to_openai(path)
     client = openai.OpenAI()
-    response = client.beta.chat.completions.create(
+    # NOTE: `file_search` requires the Assistants v2 beta header.
+    # The standard chat completion endpoint supports this via an
+    # additional header without using the beta client namespace.
+    response = client.chat.completions.create(
         model="gpt-4o-mini",
         tools=[{"type": "file_search"}],
         messages=[

@@ -21,7 +21,7 @@ test: install
 	$(VENV_BIN)/pytest -q
 
 lint: install
-	$(VENV_BIN)/ruff src
+	$(VENV_BIN)/ruff check src
 
 clean:
 	rm -rf .venv build dist *.egg-info

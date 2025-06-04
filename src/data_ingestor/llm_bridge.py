@@ -16,6 +16,8 @@ from typing import Protocol
 from openai.types.chat import ChatCompletion
 
 import openai
+
+from openai.types.chat.chat_completion import ChatCompletion
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import (

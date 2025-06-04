@@ -13,8 +13,10 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Protocol
+from openai.types.chat import ChatCompletion
 
 import openai
+
 from openai.types.chat.chat_completion import ChatCompletion
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
@@ -34,7 +36,7 @@ from langchain_openai import ChatOpenAI
 class _LLM(Protocol):
     """Subset of Chat model interface used in this module."""
 
-    def invoke(self, input) -> "ChatCompletion": ...
+    def invoke(self, input) -> ChatCompletion: ...
 
 
 def _default_llm() -> ChatOpenAI:  # noqa: D401
@@ -124,7 +126,7 @@ def upload_and_prompt(path: str | Path, task: str) -> str:
                 "role": "user",
                 "content": [
                     {"type": "text", "text": task},
-                    {"type": "file_id", "file_id": file_id},
+                    {"type": "file", "file": {"file_id": file_id}},
                 ],
             }
         ],

@@ -12,12 +12,11 @@
 from __future__ import annotations
 
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import Protocol
 from openai.types.chat import ChatCompletion
 
 import openai
-
-from openai.types.chat.chat_completion import ChatCompletion
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import (
@@ -48,10 +47,27 @@ def _default_llm() -> ChatOpenAI:  # noqa: D401
 #  Helper: upload file via OpenAI Files API
 # ───────────────────────────────────────────────────────────────
 def _upload_to_openai(path: str | Path) -> str:
-    """Upload *path* once and return the resulting `file_id`."""
+    """Upload *path* once and return the resulting `file_id`.
+
+    The OpenAI Files API currently rejects CSV files for retrieval. If a
+    ``.csv`` path is given, its contents are first copied into a temporary text
+    file which is then uploaded instead.
+    """
+    upload_path = Path(path)
+    tmp: NamedTemporaryFile | None = None
+    if upload_path.suffix.lower() == ".csv":
+        tmp = NamedTemporaryFile("w+", suffix=".txt", delete=False)
+        tmp.write(upload_path.read_text())
+        tmp.flush()
+        upload_path = Path(tmp.name)
+
     client = openai.OpenAI()  # relies on OPENAI_API_KEY environment variable
-    with Path(path).open("rb") as fh:
+    with upload_path.open("rb") as fh:
         resp = client.files.create(file=fh, purpose="assistants")
+
+    if tmp is not None:
+        Path(tmp.name).unlink(missing_ok=True)
+
     return resp.id  # e.g. file-abc123
 
 
@@ -118,7 +134,7 @@ def upload_and_prompt(path: str | Path, task: str) -> str:
     """
     file_id = _upload_to_openai(path)
     client = openai.OpenAI()
-    response = client.chat.completions.create(
+    response = client.beta.chat.completions.create(
         model="gpt-4o-mini",
         tools=[{"type": "file_search"}],
         messages=[
@@ -130,6 +146,7 @@ def upload_and_prompt(path: str | Path, task: str) -> str:
                 ],
             }
         ],
+        extra_headers={"OpenAI-Beta": "assistants=v2"},
     )
     return response.choices[0].message.content or ""
 

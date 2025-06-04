@@ -134,7 +134,7 @@ def upload_and_prompt(path: str | Path, task: str) -> str:
     """
     file_id = _upload_to_openai(path)
     client = openai.OpenAI()
-    response = client.chat.completions.create(
+    response = client.beta.chat.completions.create(
         model="gpt-4o-mini",
         tools=[{"type": "file_search"}],
         messages=[

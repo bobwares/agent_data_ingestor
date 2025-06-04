@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Protocol
 
 import openai
-import pandas as pd
+from openai.types.chat.chat_completion import ChatCompletion
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import (

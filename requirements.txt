@@ -1,0 +1,35 @@
+# Web Framework
+fastapi==0.115.4
+uvicorn[standard]==0.32.1
+python-multipart==0.0.12
+
+# Data Models & Validation
+pydantic==2.11.5
+
+# CLI & Terminal
+typer[all]==0.15.1
+rich==13.9.4
+
+# Data Processing
+pandas==2.2.3
+openpyxl==3.1.5
+
+# Configuration
+python-dotenv==1.0.1
+
+# Database
+sqlalchemy==2.0.36
+
+# LangChain Ecosystem
+langchain==0.3.25
+langchain-openai==0.2.14
+langchain-community==0.3.24
+langgraph==0.2.50
+
+# AI/ML
+openai==1.69.0
+faiss-cpu==1.11.0
+
+# Development Tools
+ruff==0.8.2
+pytest==8.3.4

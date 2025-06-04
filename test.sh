@@ -1,0 +1,1 @@
+curl -F "file=@./data/data_1.csv" http://127.0.0.1:8000/ingest

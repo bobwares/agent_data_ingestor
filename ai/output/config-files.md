@@ -1,0 +1,31 @@
+# Configuration Files Compilation
+
+## Miscellaneous
+
+### File: ./.gitignore
+
+```bash
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# IDE settings
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+```
+
